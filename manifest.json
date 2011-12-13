@@ -1,7 +1,7 @@
 {
   "name": "LearningRegistrar",
   "version": "0.1",
-  "description": "Integrates with the Metaglance metadata service to bring you a few-click learning registry submission solution.",
+  "description": "Integrates with the Metaglance metadata service to bring you a few-click Learning Registry submission solution.",
   "browser_action": {
     "default_icon": "lr_icon.png",
     "popup": "popup.html"
