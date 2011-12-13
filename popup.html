@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Returned Metadata</title>
+        <link rel="stylesheet" type="text/css" href="styles2.css" />
+        <script type="text/javascript" src="http://www.metaglance.com/sample/scripts.js">
+        </script>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.js">
+        </script>
+        <script type="text/javascript" src="sha256.js"></script>
+        <script type="text/javascript" src="bencode.js"></script>
+        <script type="text/javascript" src="learningregistrar.js"></script>
+    </head>
+    <body class="mgResults" onload="keyCheck();">
+        <div class="counter">
+        </div>
+        <div id="loading" class="main-content" style="display: block;">
+            <div class="loading">
+                <h3 class="debug">Fetching Metadata...
+                    <br/>
+                    <img src="http://www.metaglance.com/sample/cycle.gif" alt="" width="220" height="19" />
+                </h3>
+            </div>
+        </div>
+        <div id="content" class="main-content" style="display:none;">
+            <div class="content">
+                <table border="0" cellspacing="0" cellpadding="3">
+                    <tr>
+                        <td>
+                            <table cellspacing="0" align="center">
+                                <tr id="tr-error" style="display: none;">
+                                    <td colspan="2">
+                                        <img src="http://www.metaglance.com/sample/duck.png" width="208" height="181" style="float: left;"/><h2>Duck!
+                                            <br/>
+                                            It's an error
+                                        </h2>
+                                        <span class="errormsg"></span>
+                                    </td>
+                                </tr>
+                                <tr id="tr-contentanalysis">
+                                    <th colspan="2" scope="col" class="title">
+                                        Content
+                                        Analysis
+                                    </th>
+                                </tr>
+                                <tr id="tr-fileproperties">
+                                    <th colspan="2" scope="col" class="title" style="display:none;">
+                                        Content
+                                        Analysis
+                                    </th>
+                                </tr>
+                                <tr id="tr-title">
+                                    <td class="label">
+                                        Title
+                                    </td>
+                                    <td>
+                                        <span class="titlex"></span>
+                                    </td>
+                                </tr>
+                                <tr id="tr-description" style="display: none;">
+                                    <td class="label">
+                                        Description
+                                    </td>
+                                    <td>
+                                        <span class="description"></span>
+                                    </td>
+                                </tr>
+                                <tr id="tr-subject" style="display: none;">
+                                    <td class="label">
+                                        Keywords
+                                    </td>
+                                    <td>
+                                        <span class="keywords"></span>
+                                    </td>
+                                </tr>
+                                <tr id="tr-classification" style="display: none;">
+                                    <td class="label">
+                                        Classification
+                                    </td>
+                                    <td>
+                                        <span class="classification"></span>
+                                    </td>
+                                </tr>
+                                <tr id="tr-language" style="display: none;">
+                                    <td class="label">
+                                        Language
+                                    </td>
+                                    <td>
+                                        <span class="language"></span>
+                                    </td>
+                                </tr>
+                                <tr id="tr-readinglevel" style="display: none;">
+                                    <td class="label">
+                                        Reading Level
+                                    </td>
+                                    <td>
+                                        <span class="readinglevel"></span>
+                                    </td>
+                                </tr>
+                                <tr id="tr-readingtime" style="display: none;">
+                                    <td class="label">
+                                        Reading Time
+                                    </td>
+                                    <td>
+                                        <span class="readingtime"></span>
+                                    </td>
+                                </tr>
+                                <tr id="tr-pages" style="display: none;">
+                                    <td class="label">
+                                        Pages
+                                    </td>
+                                    <td>
+                                        <span class="pages"></span>
+                                    </td>
+                                </tr>
+                                <tr id="tr-statisticaldata">
+                                    <th colspan="2" class="subtitle" scope="row">
+                                        Statistical Data
+                                    </th>
+                                </tr>
+                                <tr id="tr-wordcount" style="display: none;">
+                                    <td class="label">
+                                        Word Count
+                                    </td>
+                                    <td>
+                                        <span class="wordcount"></span>
+                                    </td>
+                                </tr>
+                                <tr id="tr-uniquewordcount" style="display: none;">
+                                    <td class="label">
+                                        Unique Words
+                                    </td>
+                                    <td>
+                                        <span class="uniquewordcount"></span>
+                                    </td>
+                                </tr>
+                                <tr id="tr-sentencecount" style="display: none;">
+                                    <td class="label">
+                                        Sentences
+                                    </td>
+                                    <td>
+                                        <span class="sentencecount"></span>
+                                    </td>
+                                </tr>
+                                <tr id="tr-averagewordlength" style="display: none;">
+                                    <td class="label">
+                                        Average Word Length
+                                    </td>
+                                    <td>
+                                        <span class="averagewordlength"></span>
+                                        letters
+                                    </td>
+                                </tr>
+                                <tr id="tr-syllablecount" style="display: none;">
+                                    <td class="label">
+                                        Syllable Count
+                                    </td>
+                                    <td>
+                                        <span class="syllablecount"></span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+					<tr><center><button onclick='toLearningRegistry();'>Publish to Learning Registry</button></center></tr>
+                </table>
+            </div>
+        </div>
+        <div id="footer" class="main-content" style="display: block;">
+            <a href="http://www.metaglance.com/" onclick="goToMetaglance();">MetaGlance</a>
+            - copyright 2010, <a href="http://www.eduworks.com" onclick="goToEduworks();">Eduworks</a>
+        </div>
+    </body>
+</html>

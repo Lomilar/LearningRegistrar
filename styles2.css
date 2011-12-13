@@ -1,0 +1,105 @@
+@charset "utf-8";
+/* CSS Document */
+
+body {
+	font-family:Geneva, Arial, Helvetica, sans-serif;
+	color:#333333;
+	overflow-x: hidden;
+}
+
+#loading {
+	text-align:center;
+}
+
+#content {
+	width: 450px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#shred {
+	width: 700px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+table {
+    padding-right: 20px;
+	width:100%;
+}
+
+th, td {padding:2px;
+	vertical-align:top;}
+
+.mgResults th {
+	text-align:right;
+	white-space:nowrap;
+}
+
+th.title, th.subtitle {
+	text-align:center;
+	border:none;
+	background-color:#999999;
+	color:#FFFFFF;
+	font-size:12px;
+}
+
+td span.titlex {
+	display:block;
+	word-wrap: break-word;
+	font-weight:bold;
+}
+
+td span.description {
+	/* font-family:Georgia, "Times New Roman", Times, serif;
+	font-size: 16px;
+	font-style: italic; */
+}
+
+td.label {
+	color: #999999;
+	text-align:right;
+	padding-top: 5px;
+	padding-right:8px;
+	font-size:11px;
+	white-space:nowrap;
+}
+
+th.subtitle {
+	background-color:#CCCCCC;
+	color: #666666;
+}
+
+#footer, #footer a {
+	color:#999999;
+	font-size:8px;
+	text-align:center;
+}
+
+.hidden {display:none;}  /* used to hide rows that don't contain data */
+
+span.identifier {
+	display:block;
+	word-wrap: break-word;
+	overflow:auto;
+}
+
+pre.json {
+	display:block;
+	max-width: 350px;
+	overflow-x: auto; /* Use horizontal scroller if needed; for Firefox 2, not needed in Firefox 3 */
+	white-space: pre-wrap; /* css-3 */
+	white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
+	white-space: -pre-wrap; /* Opera 4-6 */
+	white-space: -o-pre-wrap; /* Opera 7 */
+	 /* width: 99%; */
+	word-wrap: break-word; /* Internet Explorer 5.5+ */
+	
+	background:#f2f2f2;
+	border-top: 2px solid #ccc;
+	border-bottom: 2px solid #ccc;
+	margin: 5px auto;
+	padding: 20px;
+	text-align:left;
+	font-size:12px;
+}

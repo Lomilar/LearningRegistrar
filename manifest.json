@@ -1,0 +1,23 @@
+{
+  "name": "LearningRegistrar",
+  "version": "0.1",
+  "description": "Integrates with the Metaglance metadata service to bring you a few-click learning registry submission solution.",
+  "browser_action": {
+    "default_icon": "lr_icon.png",
+    "popup": "popup.html"
+  },
+  "icons": {
+     "128": "lr_icon.png"
+  },
+  "permissions": [
+    "http://service.metaglance.com/",
+    "tabs"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["http://*/*","https://*/*"],
+      "js": ["contentscript.js","jquery-1.4.2.js"],
+      "all_frames": true
+    }
+  ]
+}
