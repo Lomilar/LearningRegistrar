@@ -11,12 +11,13 @@
   },
   "permissions": [
     "http://service.metaglance.com/",
+    "http://sphinx.eduworks.com/",
     "tabs"
   ],
   "content_scripts": [
     {
       "matches": ["http://*/*","https://*/*"],
-      "js": ["contentscript.js","jquery-1.4.2.js"],
+      "js": ["js/contentscript.js","js/jquery-1.4.2.js"],
       "all_frames": true
     }
   ]

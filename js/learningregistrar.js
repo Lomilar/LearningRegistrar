@@ -42,9 +42,6 @@ function ajax_upload(url,data,filename,uploadreturn) {
 		dataType: "json", 
 		contentType:"multipart/form-data; boundary=" + boundary + "",
 		error: function(request, textStatus, errorThrown){
-			alert(errorThrown);
-		},
-		success: function(data,textStatus){
 			$.ajax({
 				url: url+"&sec="+random,
 				type: "GET",
@@ -56,6 +53,10 @@ function ajax_upload(url,data,filename,uploadreturn) {
 					uploadreturn(data);
 				}
 	  	    });
+		},
+		success: function(data,textStatus){
+			
+					uploadreturn(data);
 		}	  		
 	});
 }
@@ -140,23 +141,66 @@ var currentUrl;
 
 function sign(data)
 {
-	var bencoded = bencode(data);
-	var hashed = sha256_digest(bencoded);
-	var hash = prompt("Please use your private key to sign the following data: '" + hashed + "'",hashed);
+	openpgp.config.config.prefer_hash_algorithm = 8; 
+	openpgp.config.write();
+	//IT:0.49.0 Creating signature
+	delete data.doc_id;
+	delete data.publishing_node;
+	delete data.update_timestamp;
+	delete data.node_timestamp;
+	delete data.create_timestamp;
 	
-	return hash;
+	var temp_digital_signature = data.digital_signature;
+	delete data.digital_signature;
+	
+	var bencoded = bencode(data);
+	var hashed = str_sha256(bencoded);
+	if (!openpgp.keyring.hasPrivateKey())
+	{
+		alert("No private key found.");
+	}
+	var signedHash = openpgp.write_signed_message(openpgp.keyring.privateKeys[0].obj,hashed);
+	
+	data.digital_signature = temp_digital_signature;
+	signedHash = signedHash.replace("\r\n","\n");
+	return signedHash;
 }
+
+openpgp.init();
+
+function clearPrivateKey()
+{
+	openpgp.keyring.privateKeys = [];
+	openpgp.keyring.store();
+}
+
+function importPrivateKey() {
+	openpgp.keyring.privateKeys = [];
+	//openpgp.keyring.publicKeys = [];
+	var privatekey = $(".privateKeyTextArea").val();
+	//var publickey = $(".publicKeyTextArea").val();
+	openpgp.keyring.importPrivateKey(privatekey);
+	openpgp.keyring.store();
+	$("#privateKeyDiv").hide();
+	$("#content").show();
+}
+
+function showImportPrivateKey() {
+	$("#privateKeyDiv").show();
+	$("#content").hide();
+}
+
 function fetchEnvelope(resourceData,currentUrl,isParadata)
 {
 	var useSigned = confirm("Please click OK if you would like to use a signed request. You will be required to have a PGP Private key.");
 	if (useSigned)
-		return {
+	{
+	var tempResult = {
 			doc_type: "resource_data", 
 			resource_data: resourceData,
 			digital_signature: {
-				signature: sign(resourceData),
-				key_owner: prompt("Please insert the PGP Key Owner name."),
-				key_location: prompt("Please insert the URL of the third party who has signed your key.","http://keyserver.pgp.com"),
+				key_owner: openpgp.keyring.privateKeys[0].obj.userIds[0].text,
+				key_location: [prompt("Please insert the URL of the third party who has signed your key.","http://keys.gnupg.net/pks/lookup?op=get&search=0xD89734AE9DD62046")],
 				signing_method: "LR-PGP.1.0"
 			},
 			keys: ["metadata","Eduworks","generated","Metaglance"], 
@@ -164,7 +208,7 @@ function fetchEnvelope(resourceData,currentUrl,isParadata)
 			payload_placement: "inline", 
 			payload_schema: isParadata ? ["LR Paradata 1.0"]:["dc"], 
 			doc_version: "0.23.0", 
-			active: true,
+			active: "true",
 			publishing_node: "local",
 			resource_locator: currentUrl, 
 			identity: {
@@ -174,6 +218,11 @@ function fetchEnvelope(resourceData,currentUrl,isParadata)
 				curator: "metaglance.com"
 				}
 			};
+			
+		tempResult.digital_signature.signature=sign(tempResult);
+		tempResult.active = true;
+		return tempResult;
+	}
 		else
 			return {
 			doc_type: "resource_data", 

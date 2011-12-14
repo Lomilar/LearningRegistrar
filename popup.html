@@ -3,15 +3,69 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>Returned Metadata</title>
-        <link rel="stylesheet" type="text/css" href="styles2.css" />
-        <script type="text/javascript" src="http://www.metaglance.com/sample/scripts.js">
-        </script>
-        <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.js">
-        </script>
-        <script type="text/javascript" src="sha256.js"></script>
-        <script type="text/javascript" src="bencode.js"></script>
-        <script type="text/javascript" src="learningregistrar.js"></script>
-        <script type="text/javascript" src="paradataForms.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/styles2.css" />
+        <script type="text/javascript" src="http://www.metaglance.com/sample/scripts.js"></script>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.1.js"></script>
+		
+		<script type="text/javascript" src="js/ciphers/hash/sha.js"></script>
+		<script type="text/javascript" src="js/ciphers/hash/md5.js"></script>
+		<script type="text/javascript" src="js/ciphers/hash/ripe-md.js"></script>
+
+		<!-- crypto libs -->	
+		<script type="text/javascript" src="js/ciphers/symmetricencryption/aes.js"></script>
+		<script type="text/javascript" src="js/ciphers/symmetricencryption/cast5.js"></script>
+		<script type="text/javascript" src="js/ciphers/symmetricencryption/dessrc.js"></script>
+		<script type="text/javascript" src="js/ciphers/symmetricencryption/twofish.js"></script>
+		<script type="text/javascript" src="js/ciphers/symmetricencryption/blowfish.js"></script>
+
+		<script type="text/javascript" src="js/ciphers/asymetricencryption/jsbn.js"></script>
+		<script type="text/javascript" src="js/ciphers/asymetricencryption/jsbn2.js"></script>
+		<script type="text/javascript" src="js/ciphers/asymetricencryption/dsa.js"></script>
+		<script type="text/javascript" src="js/ciphers/asymetricencryption/elgamal.js"></script>
+		<script type="text/javascript" src="js/ciphers/asymetricencryption/rsa.js"></script>
+
+		<script type="text/javascript" src="js/ciphers/openpgp.crypto.js"></script>
+		<script type="text/javascript" src="js/ciphers/openpgp.cfb.js"></script>
+
+		<!-- compression -->
+
+		<!-- encoding -->
+		<script type="text/javascript" src="js/encoding/base64.js"></script>
+		<script type="text/javascript" src="js/encoding/openpgp.encoding.asciiarmor.js"></script>
+		<script type="text/javascript" src="js/encoding/openpgp.encoding.js"></script>
+
+		<!-- openpgp types -->
+		<script type="text/javascript" src="js/type/openpgp.type.keyid.js"></script>
+		<script type="text/javascript" src="js/type/openpgp.type.mpi.js"></script>
+		<script type="text/javascript" src="js/type/openpgp.type.s2k.js"></script>
+
+		<!-- openpgp packets -->
+		<script type="text/javascript" src="js/packet/openpgp.packet.compressed.js"></script>
+		<script type="text/javascript" src="js/packet/openpgp.packet.encrypteddata.js"></script>
+		<script type="text/javascript" src="js/packet/openpgp.packet.encryptedintegrityprotecteddata.js"></script>
+		<script type="text/javascript" src="js/packet/openpgp.packet.encryptedsessionkey.js"></script>
+		<script type="text/javascript" src="js/packet/openpgp.packet.keymaterial.js"></script>
+		<script type="text/javascript" src="js/packet/openpgp.packet.literaldata.js"></script>
+		<script type="text/javascript" src="js/packet/openpgp.packet.marker.js"></script>
+		<script type="text/javascript" src="js/packet/openpgp.packet.modificationdetectioncode.js"></script>
+		<script type="text/javascript" src="js/packet/openpgp.packet.onepasssignature.js"></script>
+		<script type="text/javascript" src="js/packet/openpgp.packet.signature.js"></script>
+		<script type="text/javascript" src="js/packet/openpgp.packet.userattribute.js"></script>
+		<script type="text/javascript" src="js/packet/openpgp.packet.userid.js"></script>
+		<script type="text/javascript" src="js/packet/openpgp.packet.js"></script>
+
+		<!--  openpgp impl. -->
+		<script type="text/javascript" src="js/openpgp.js"></script>
+		<script type="text/javascript" src="js/openpgp.config.js"></script>
+		<script type="text/javascript" src="js/openpgp.keyring.js"></script>
+		<script type="text/javascript" src="js/openpgp.msg.message.js"></script>
+		<script type="text/javascript" src="js/openpgp.msg.privatekey.js"></script>
+		<script type="text/javascript" src="js/openpgp.msg.publickey.js"></script>
+		<script type="text/javascript" src="js/util.js"></script>
+				
+        <script type="text/javascript" src="js/bencode.js"></script>
+        <script type="text/javascript" src="js/learningregistrar.js"></script>
+        <script type="text/javascript" src="js/paradataForms.js"></script>
     </head>
     <body class="mgResults" onload="keyCheck();">
         <div class="counter">
@@ -22,6 +76,19 @@
                     <br/>
                     <img src="http://www.metaglance.com/sample/cycle.gif" alt="" width="220" height="19" />
                 </h3>
+            </div>
+        </div>
+        <div id="privateKeyDiv" class="main-content" style="display: none;">
+            <div class="privateKeyDiv">
+                <h3 class="debug">Please place your private key here.
+                    <br/>
+                    <textarea class="privateKeyTextArea" rows="10" cols="50"></textarea>
+					<button onclick='importPrivateKey();'>Import Keys</button>
+                </h3>
+                <!--<h3 class="debug">Please place your public key here.
+                    <br/>
+                    <textarea class="publicKeyTextArea" rows="10" cols="50"></textarea>
+                </h3>-->
             </div>
         </div>
         <div id="content" class="main-content" style="display:none;">
@@ -164,7 +231,13 @@
                             </table>
                         </td>
                     </tr>
-					<tr><center><button onclick='toLearningRegistry();'>Publish to Learning Registry</button><button onclick='submitParadataToLearningRegistry(assembleParadataViewed());'>I viewed this.</button></center></tr>
+					<tr>
+					<center>
+						<button onclick='clearPrivateKey();'>Clear Private Keys</button>
+						<button onclick='showImportPrivateKey();'>Import Private Key</button>
+						<button onclick='toLearningRegistry();'>Publish to Learning Registry</button>
+						<button onclick='submitParadataToLearningRegistry(assembleParadataViewed());'>I viewed this.</button>
+					</center></tr>
                 </table>
             </div>
         </div>
