@@ -126,7 +126,7 @@ chrome.extension.onRequest.addListener(function(response,sender,sendRequest){
         {
             if (--counter == 0) 
             {
-				current_url = response.url;
+				currentUrl = response.url;
                 if (sumOfHtml != null)  
                     ajax_upload("http://sphinx.eduworks.com/learningregistry/getMetadata?url="+response.url,sumOfHtml,"blah.html",function(data){
                         doStuff(data);
@@ -136,7 +136,7 @@ chrome.extension.onRequest.addListener(function(response,sender,sendRequest){
             }
         }
 });
-var current_url;
+var currentUrl;
 
 function sign(data)
 {
@@ -146,27 +146,27 @@ function sign(data)
 	
 	return hash;
 }
-function fetchEnvelope()
+function fetchEnvelope(resourceData,currentUrl,isParadata)
 {
 	var useSigned = confirm("Please click OK if you would like to use a signed request. You will be required to have a PGP Private key.");
 	if (useSigned)
 		return {
 			doc_type: "resource_data", 
-			resource_data: generatedMetadata,
+			resource_data: resourceData,
 			digital_signature: {
-				signature: sign(generatedMetadata),
+				signature: sign(resourceData),
 				key_owner: prompt("Please insert the PGP Key Owner name."),
 				key_location: prompt("Please insert the URL of the third party who has signed your key.","http://keyserver.pgp.com"),
 				signing_method: "LR-PGP.1.0"
 			},
 			keys: ["metadata","Eduworks","generated","Metaglance"], 
-			resource_data_type: "metadata", 
+			resource_data_type: isParadata ? "paradata":"metadata", 
 			payload_placement: "inline", 
-			payload_schema: ["dc"], 
+			payload_schema: isParadata ? ["LR Paradata 1.0"]:["dc"], 
 			doc_version: "0.23.0", 
 			active: true,
 			publishing_node: "local",
-			resource_locator: current_url, 
+			resource_locator: currentUrl, 
 			identity: {
 				owner: "metaglance.com", 
 				submitter: "LearningRegistrar", 
@@ -177,15 +177,15 @@ function fetchEnvelope()
 		else
 			return {
 			doc_type: "resource_data", 
-			resource_data: generatedMetadata, 
+			resource_data: resourceData, 
 			keys: ["metadata","Eduworks","generated","Metaglance"], 
-			resource_data_type: "metadata", 
+			resource_data_type: isParadata ? "paradata":"metadata", 
 			payload_placement: "inline", 
-			payload_schema: ["dc"], 
+			payload_schema: isParadata ? ["LR Paradata 1.0"]:["dc"], 
 			doc_version: "0.23.0", 
 			active: true,
 			publishing_node: "local",
-			resource_locator: current_url, 
+			resource_locator: currentUrl, 
 			identity: {
 				owner: "metaglance.com", 
 				submitter: "LearningRegistrar", 
@@ -197,7 +197,20 @@ function fetchEnvelope()
 }
 function toLearningRegistry()
 {
-	var result = fetchEnvelope();
+	var result = fetchEnvelope(generatedMetadata,currentUrl);
+	$.ajax({
+		url: "http://lrdev01.learningregistry.org/publish",
+		type: "POST",
+		data: JSON.stringify({documents:[result]}),
+		contentType: "application/json",
+		success: function(data){
+			chrome.tabs.create({url:"http://lrdev01.learningregistry.org/obtain?request_id="+data.document_results[0].doc_ID+"&by_doc_ID=t"});
+		}
+    });
+}
+function submitParadataToLearningRegistry(paradataChunk)
+{
+	var result = fetchEnvelope(paradataChunk,currentUrl);
 	$.ajax({
 		url: "http://lrdev01.learningregistry.org/publish",
 		type: "POST",

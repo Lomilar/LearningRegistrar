@@ -11,6 +11,7 @@
         <script type="text/javascript" src="sha256.js"></script>
         <script type="text/javascript" src="bencode.js"></script>
         <script type="text/javascript" src="learningregistrar.js"></script>
+        <script type="text/javascript" src="paradataForms.js"></script>
     </head>
     <body class="mgResults" onload="keyCheck();">
         <div class="counter">
@@ -163,7 +164,7 @@
                             </table>
                         </td>
                     </tr>
-					<tr><center><button onclick='toLearningRegistry();'>Publish to Learning Registry</button></center></tr>
+					<tr><center><button onclick='toLearningRegistry();'>Publish to Learning Registry</button><button onclick='submitParadataToLearningRegistry(assembleParadataViewed());'>I viewed this.</button></center></tr>
                 </table>
             </div>
         </div>
